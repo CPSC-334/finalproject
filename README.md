@@ -14,6 +14,8 @@ To dive deeper into Continuous Integration and Continuous Development Practices,
 - Exponents
 - Logarithms
 - And many more!
+
+
 Through this project, we can each take on the simple tasks of one of these functions of a calculator at a time, and we can therefore integrate our code with each frequently (and ideally without many errors). 
 
 We have an interest in math that makes coding these functions enjoyable and useful. We will learn about CI/CD together through group implementation. This calculator will serve as a great intro to these very useful topics. 
