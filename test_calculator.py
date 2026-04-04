@@ -49,3 +49,18 @@ def test_multiply_two_negatives(calc):
 
 def test_multiply_by_zero(calc):
     assert calc.multiply(7, 0) == 0
+
+# --- Division ---
+
+def test_divide_basic(calc):
+    assert calc.divide(10, 2) == 5
+
+def test_divide_negative(calc):
+    assert calc.divide(-12, 4) == -3
+
+def test_divide_two_negatives(calc):
+    assert calc.divide(-15, -3) == 5
+
+def test_divide_by_zero(calc):
+    with pytest.raises(ValueError, match="Cannot divide by zero, answer is undefined."):
+        calc.divide(10, 0)
