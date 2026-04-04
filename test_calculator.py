@@ -35,3 +35,17 @@ def test_subtract_negative_number(calc):
 
 def test_subtract_zero(calc):
     assert calc.subtract(5, 0) == 5
+
+# --- Multiplication ---
+
+def test_multiply_basic(calc):
+    assert calc.multiply(4, 5) == 20
+
+def test_multiply_negative(calc):
+    assert calc.multiply(-3, 6) == -18
+
+def test_multiply_two_negatives(calc):
+    assert calc.multiply(-2, -4) == 8
+
+def test_multiply_by_zero(calc):
+    assert calc.multiply(7, 0) == 0
