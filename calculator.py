@@ -27,4 +27,6 @@ class Calculator:
     def root(self, a, b):
         if a < 0 and b % 2 == 0:
             raise ValueError("Cannot take an even root of a negative number.")
+        if a < 0 and b % 2 != 0:
+            return -((-a) ** (1 / b))
         return a ** (1 / b)
