@@ -64,3 +64,45 @@ def test_divide_two_negatives(calc):
 def test_divide_by_zero(calc):
     with pytest.raises(ValueError, match="Cannot divide by zero, answer is undefined."):
         calc.divide(10, 0)
+
+# --- Square ---
+def test_square_basic(calc):
+    assert calc.square(4) == 16
+
+def test_square_negative(calc):
+    assert calc.square(-3) == 9
+
+# --- Power ---
+
+def test_power_basic(calc):
+    assert calc.power(2, 3) == 8
+
+def test_power_zero_exponent(calc):
+    assert calc.power(5, 0) == 1
+
+def test_power_negative_base(calc):
+    assert calc.power(-2, 3) == -8
+
+# --- Square Root ---
+
+def test_square_root_basic(calc):
+    assert calc.square_root(16) == 4
+
+def test_square_root_zero(calc):
+    assert calc.square_root(0) == 0
+
+def test_square_root_negative(calc):
+    with pytest.raises(ValueError, match="Cannot take the square root of a negative number."):
+        calc.square_root(-4)
+
+# --- Root ---
+
+def test_root_basic(calc):
+    assert calc.root(27, 3) == 3
+
+def test_root_even_root_of_negative(calc):
+    with pytest.raises(ValueError, match="Cannot take an even root of a negative number."):
+        calc.root(-8, 2)
+
+def test_root_odd_root_of_negative(calc):
+    assert calc.root(-8, 3) == -2
