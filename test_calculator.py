@@ -106,3 +106,17 @@ def test_root_even_root_of_negative(calc):
 
 def test_root_odd_root_of_negative(calc):
     assert calc.root(-8, 3) == -2
+
+
+# --- Logarithm ---
+def test_logarithm_basic(calc):
+    assert calc.logarithm(100, 10) == 2
+
+def test_logarithm_zero_or_negative(calc):
+    with pytest.raises(ValueError, match="Logarithm is undefined for non-positive numbers."):
+        calc.logarithm(0, 10)
+
+def test_logarithm_invalid_base(calc):
+    with pytest.raises(ValueError, match="Logarithm base must be greater than 1."):
+        calc.logarithm(100, 1)
+
