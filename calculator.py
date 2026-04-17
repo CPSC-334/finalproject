@@ -30,11 +30,19 @@ class Calculator:
         if a < 0 and b % 2 != 0:
             return -((-a) ** (1 / b))
         return a ** (1 / b)
+    
+    def logarithm(self, a, base):
+        if a <= 0:
+            raise ValueError("Logarithm is undefined for non-positive numbers.")
+        if base <= 1:
+            raise ValueError("Logarithm base must be greater than 1.")
+        import math
+        return math.log(a, base)
 
 def main():
     calculator = Calculator()
     print("Welcome to the Calculator!")
-    print("Supported operations: +, -, *, /, ^ (power), sqrt (square root)")
+    print("Supported operations: +, -, *, /, ^ (power), sqrt (square root), log (logarithm)")
     print()
     
     while True:
@@ -88,9 +96,24 @@ def main():
                 num = float(equation.replace('sqrt', '').strip())
                 result = calculator.square_root(num)
                 print(f"Result: {result}\n")
+
+            elif 'root' in equation:
+                parts = equation.split('root')
+                num = float(parts[0].strip())
+                degree = float(parts[1].strip())
+                result = calculator.root(num, degree)
+                print(f"Result: {result}\n")
+
+            elif 'log' in equation:
+                parts = equation.split('log')
+                num = float(parts[0].strip())
+                base = float(parts[1].strip())
+                result = calculator.logarithm(num, base)
+                print(f"Calculating logarithm as log base {base} of {num}...")
+                print(f"Result: {result}\n")
             
             else:
-                print("Invalid equation format. Please use basic operations: +, -, *, /, ^, sqrt\n")
+                print("Invalid equation format. Please use basic operations: +, -, *, /, ^, sqrt, log\n")
         
         except ValueError as error:
             print(f"Error: {error}\n")
