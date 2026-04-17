@@ -39,6 +39,77 @@ class Calculator:
         import math
         return math.log(a, base)
 
+    def evaluate(self, expression):
+        tokens = self._tokenize(expression.replace(' ', ''))
+        result, pos = self._parse_expr(tokens, 0)
+        if pos != len(tokens):
+            raise ValueError("Invalid expression")
+        return result
+
+    def _tokenize(self, expression):
+        tokens = []
+        i = 0
+        while i < len(expression):
+            if expression[i].isdigit() or expression[i] == '.':
+                j = i
+                while j < len(expression) and (expression[j].isdigit() or expression[j] == '.'):
+                    j += 1
+                tokens.append(('NUM', float(expression[i:j])))
+                i = j
+            elif expression[i] in '+-*/^()':
+                tokens.append(('OP', expression[i]))
+                i += 1
+            else:
+                raise ValueError(f"Unknown character: {expression[i]}")
+        return tokens
+
+    def _parse_expr(self, tokens, pos):
+        left, pos = self._parse_term(tokens, pos)
+        while pos < len(tokens) and tokens[pos][0] == 'OP' and tokens[pos][1] in ('+', '-'):
+            op = tokens[pos][1]
+            pos += 1
+            right, pos = self._parse_term(tokens, pos)
+            left = self.add(left, right) if op == '+' else self.subtract(left, right)
+        return left, pos
+
+    def _parse_term(self, tokens, pos):
+        left, pos = self._parse_power(tokens, pos)
+        while pos < len(tokens) and tokens[pos][0] == 'OP' and tokens[pos][1] in ('*', '/'):
+            op = tokens[pos][1]
+            pos += 1
+            right, pos = self._parse_power(tokens, pos)
+            left = self.multiply(left, right) if op == '*' else self.divide(left, right)
+        return left, pos
+
+    def _parse_power(self, tokens, pos):
+        base, pos = self._parse_unary(tokens, pos)
+        if pos < len(tokens) and tokens[pos] == ('OP', '^'):
+            pos += 1
+            exp, pos = self._parse_power(tokens, pos)  # right-associative
+            return self.power(base, exp), pos
+        return base, pos
+
+    def _parse_unary(self, tokens, pos):
+        if pos < len(tokens) and tokens[pos] == ('OP', '-'):
+            pos += 1
+            val, pos = self._parse_atom(tokens, pos)
+            return -val, pos
+        return self._parse_atom(tokens, pos)
+
+    def _parse_atom(self, tokens, pos):
+        if pos >= len(tokens):
+            raise ValueError("Unexpected end of expression")
+        tok_type, tok_val = tokens[pos]
+        if tok_type == 'NUM':
+            return tok_val, pos + 1
+        if tok_val == '(':
+            pos += 1
+            val, pos = self._parse_expr(tokens, pos)
+            if pos >= len(tokens) or tokens[pos] != ('OP', ')'):
+                raise ValueError("Missing closing parenthesis")
+            return val, pos + 1
+        raise ValueError(f"Unexpected token: {tok_val}")
+
 def main():
     calculator = Calculator()
     print("Welcome to the Calculator!")
@@ -53,6 +124,12 @@ def main():
             break
         
         try:
+            # parentheses / full expression evaluation
+            if '(' in equation:
+                result = calculator.evaluate(equation)
+                print(f"Result: {result}\n")
+                continue
+
             # addition
             if '+' in equation:
                 parts = equation.split('+')
